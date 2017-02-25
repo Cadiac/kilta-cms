@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "directus:schema": "./tools/dump-database-schema.sh"
+    "directus:export": "./tools/export-database-schema.sh",
+    "directus:import": "./tools/import-database-schema.sh"
   },
   "keywords": [
     "directus",
     "cms",
-    "guild",
-    "student",
-    "kilta"
+    "kilta",
+    "ohsiha"
   ],
   "author": "Jaakko Husso (jaakko.husso@futurice.com)",
   "license": "MIT"
