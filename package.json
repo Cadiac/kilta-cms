@@ -4,7 +4,7 @@
   "description": "Generic CMS platform for student organizations, built on Directus.",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/server.js",
+    "start": "nodemon ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js",
     "directus:export": "./tools/export-database-schema.sh",
@@ -38,6 +38,7 @@
   "devDependencies": {
     "eslint": "^3.16.1",
     "eslint-config-airbnb-base": "^11.1.0",
-    "eslint-plugin-import": "^2.2.0"
+    "eslint-plugin-import": "^2.2.0",
+    "nodemon": "^1.11.0"
   }
 }
