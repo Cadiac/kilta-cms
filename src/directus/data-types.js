@@ -1,4 +1,4 @@
-const dataTypes = {
+module.exports = {
   boardMembers: {
     table: 'board_members',
   },
@@ -38,8 +38,4 @@ const dataTypes = {
   subpages: {
     table: 'subpages',
   },
-};
-
-module.exports = {
-  dataTypes,
 };
