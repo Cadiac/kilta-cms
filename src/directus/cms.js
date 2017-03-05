@@ -7,6 +7,7 @@ const utils = require('./utils');
 const client = directus.getDirectusClient();
 
 const ACTIVE = 1;
+const perPage = 25;
 
 function getActiveItems(dataType, options) {
   const defaultParams = {
@@ -17,8 +18,12 @@ function getActiveItems(dataType, options) {
   return client.getItems(dataType, params);
 }
 
-const fetchNews = () => getActiveItems(dataTypes.news.table, { sort: 'created_on', sort_order: 'DESC' })
-  .then(utils.mapNewsResults);
+const fetchNews = currentPage => getActiveItems(dataTypes.news.table, {
+  sort: 'created_on',
+  sort_order: 'DESC',
+  currentPage,
+  perPage,
+}).then(utils.mapNewsResults);
 
 module.exports = {
   fetchNews,
