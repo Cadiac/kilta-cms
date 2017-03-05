@@ -18,12 +18,17 @@ function getActiveItems(dataType, options) {
   return client.getItems(dataType, params);
 }
 
-const fetchNews = currentPage => getActiveItems(dataTypes.news.table, {
-  sort: 'created_on',
-  sort_order: 'DESC',
-  currentPage,
-  perPage,
-}).then(utils.mapNewsResults);
+const fetchNews = (currentPage) => {
+  const options = {
+    sort: 'created_on',
+    sort_order: 'DESC',
+    currentPage,
+    perPage,
+  };
+
+  getActiveItems(dataTypes.news.table, options)
+    .then(utils.mapNewsResults);
+};
 
 module.exports = {
   fetchNews,
