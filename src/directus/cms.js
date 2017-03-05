@@ -18,7 +18,7 @@ function getActiveItems(dataType, options) {
 }
 
 const fetchNews = () => getActiveItems(dataTypes.news.table, { sort: 'created_on', sort_order: 'DESC' })
-  .then(utils.mapNewsResults)
+  .then(utils.mapNewsResults);
 
 module.exports = {
   fetchNews,
