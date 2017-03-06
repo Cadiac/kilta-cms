@@ -10,7 +10,7 @@ module.exports.getNews = {
       page: Joi.number().integer().min(0).required(),
     },
   },
-  handler: (request, reply) => {
+  handler(request, reply) {
     return cms.fetchNews(request.query.page)
       .then(news => reply(news))
       .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));

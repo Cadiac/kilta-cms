@@ -26,10 +26,47 @@ const fetchNews = (currentPage) => {
     perPage,
   };
 
-  getActiveItems(dataTypes.news.table, options)
+  return getActiveItems(dataTypes.news.table, options)
     .then(utils.mapNewsResults);
 };
 
+const fetchUpcomingEvents = (currentPage) => {
+  const options = {
+    sort: 'event_start_time',
+    sort_order: 'ASC',
+    currentPage,
+    perPage,
+    filters: {
+      event_end_time: {
+        '>=': new Date().toISOString(),
+      },
+    },
+  };
+
+  return getActiveItems(dataTypes.events.table, options)
+    .then(utils.mapEventsResults);
+};
+
+const fetchPastEvents = (currentPage) => {
+  const options = {
+    sort: 'event_start_time',
+    sort_order: 'ASC',
+    currentPage,
+    perPage,
+    filters: {
+      event_end_time: {
+        '<': new Date().toISOString(),
+      },
+    },
+  };
+
+  return getActiveItems(dataTypes.events.table, options)
+    .then(utils.mapEventsResults);
+};
+
+
 module.exports = {
   fetchNews,
+  fetchUpcomingEvents,
+  fetchPastEvents,
 };
