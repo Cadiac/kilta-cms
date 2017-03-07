@@ -43,7 +43,24 @@ function mapEventsResults(results) {
   return R.map(mapResults, getData(results));
 }
 
+function mapGuildBoardsResult(results) {
+  return R.map(R.pick(['id', 'title', 'year', 'slug']), getData(results));
+}
+
+function mapGuildBoardMeta(results) {
+  return R.pick(['id', 'text', 'title', 'year', 'slug', 'board_members_title', 'board_officials_title'], results);
+}
+
+function mapBoardMember(result) {
+  const pickProps = R.pick(['id', 'title', 'first_name', 'last_name', 'email_shorthand', 'IRC_nick', 'image']);
+
+  return result;
+}
+
 module.exports = {
   mapNewsResults,
   mapEventsResults,
+  mapGuildBoardsResult,
+  mapGuildBoardMeta,
+  mapBoardMember,
 };
