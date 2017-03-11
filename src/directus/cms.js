@@ -124,6 +124,13 @@ const fetchGuildBoardByYear = (year) => {
     }));
 };
 
+const fetchLinkLogo = link => BPromise.props({
+  link: R.prop('link', link),
+  name: R.prop('name', link),
+  logo: getActiveFile(R.prop('logo', link))
+    .then(logo => config.directusFilesUrl + R.path(['data', 'thumbnail_url'], logo)),
+});
+
 const fetchSubPages = () => getActiveItems(dataTypes.categories.table)
   .then(R.prop('data'))
   .then(R.filter(R.compose(R.not, R.isEmpty, R.path(['subpages', 'data']))))
@@ -146,6 +153,17 @@ const fetchSubPageBySlug = (slug) => {
     .then(R.pick(['title', 'slug', 'text', 'category_id']));
 };
 
+const fetchFooter = () => getActiveItems(dataTypes.footer.table)
+  .then(R.compose(R.head, R.prop('data')))
+  .then(R.pick(['contact_info', 'other_links', 'social_media_buttons']))
+  .then(footer => BPromise.props({
+    contact_info: footer.contact_info,
+    other_links: R.map(R.pick(['title', 'link']), footer.other_links.data),
+    social_media_buttons: BPromise.map(
+      footer.social_media_buttons.data,
+      fetchLinkLogo),
+  }));
+
 module.exports = {
   fetchNews,
   fetchUpcomingEvents,
@@ -154,4 +172,5 @@ module.exports = {
   fetchSubPageBySlug,
   fetchGuildBoards,
   fetchGuildBoardByYear,
+  fetchFooter,
 };
