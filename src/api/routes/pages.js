@@ -12,7 +12,7 @@ module.exports.getGuildBoardByYear = {
   },
   handler(request, reply) {
     return cms.fetchGuildBoardByYear(request.params.year)
-      .then(board => reply(board))
+      .then(reply)
       .catch(err => reply(Boom.badImplementation(err)));
   },
 };
@@ -21,7 +21,25 @@ module.exports.getGuildBoards = {
   description: 'Get available guild board pages',
   handler(request, reply) {
     return cms.fetchGuildBoards()
-      .then(board => reply(board))
+      .then(reply)
+      .catch(err => reply(Boom.badImplementation(err)));
+  },
+};
+
+module.exports.getSubPages = {
+  description: 'Get list of subpages',
+  handler(request, reply) {
+    return cms.fetchSubPages()
+      .then(reply)
+      .catch(err => reply(Boom.badImplementation(err)));
+  },
+};
+
+module.exports.getSubPageBySlug = {
+  description: 'Get sub page by slug',
+  handler(request, reply) {
+    return cms.fetchSubPageBySlug(request.params.slug)
+      .then(reply)
       .catch(err => reply(Boom.badImplementation(err)));
   },
 };

@@ -124,10 +124,34 @@ const fetchGuildBoardByYear = (year) => {
     }));
 };
 
+const fetchSubPages = () => getActiveItems(dataTypes.categories.table)
+  .then(R.prop('data'))
+  .then(R.filter(R.compose(R.not, R.isEmpty, R.path(['subpages', 'data']))))
+  .then(R.map(R.pick(['title', 'slug', 'subpages'])))
+  .then(R.map(category => R.merge(category, {
+    subpages: R.map(R.pick(['title', 'slug', 'priority']), category.subpages.data),
+  })));
+
+const fetchSubPageBySlug = (slug) => {
+  const options = {
+    filters: {
+      slug: {
+        '=': slug,
+      },
+    },
+  };
+
+  return getActiveItems(dataTypes.subpages.table, options)
+    .then(R.compose(R.head, R.prop('data')))
+    .then(R.pick(['title', 'slug', 'text', 'category_id']));
+};
+
 module.exports = {
   fetchNews,
   fetchUpcomingEvents,
   fetchPastEvents,
+  fetchSubPages,
+  fetchSubPageBySlug,
   fetchGuildBoards,
   fetchGuildBoardByYear,
 };

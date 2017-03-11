@@ -12,7 +12,7 @@ module.exports.getUpcomingEvents = {
   },
   handler(request, reply) {
     return cms.fetchUpcomingEvents(request.query.page)
-      .then(events => reply(events))
+      .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
   },
 };
@@ -26,7 +26,7 @@ module.exports.getPastEvents = {
   },
   handler(request, reply) {
     return cms.fetchPastEvents(request.query.page)
-      .then(events => reply(events))
+      .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
   },
 };

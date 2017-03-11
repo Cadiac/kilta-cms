@@ -12,7 +12,7 @@ module.exports.getNews = {
   },
   handler(request, reply) {
     return cms.fetchNews(request.query.page)
-      .then(news => reply(news))
+      .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
   },
 };

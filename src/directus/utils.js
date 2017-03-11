@@ -12,14 +12,14 @@ const pickParticipants = result => ({
   participants: R.map(getUsername, getParticipants(result)),
 });
 
-function mapNewsResults(results) {
+const mapNewsResults = (results) => {
   const pickProps = R.pick(['id', 'title', 'text', 'slug', 'created_on', 'tags', 'news_category']);
   const mapResults = result => R.merge(pickProps(result), pickAuthors(result));
 
   return R.map(mapResults, getData(results));
-}
+};
 
-function mapEventsResults(results) {
+const mapEventsResults = (results) => {
   const eventProps = [
     'id',
     'title',
@@ -41,26 +41,15 @@ function mapEventsResults(results) {
     pickParticipants(result)]);
 
   return R.map(mapResults, getData(results));
-}
+};
 
-function mapGuildBoardsResult(results) {
-  return R.map(R.pick(['id', 'title', 'year', 'slug']), getData(results));
-}
+const mapGuildBoardsResult = results => R.map(R.pick(['id', 'title', 'year', 'slug']), getData(results));
 
-function mapGuildBoardMeta(results) {
-  return R.pick(['id', 'text', 'title', 'year', 'slug', 'board_members_title', 'board_officials_title'], results);
-}
-
-function mapBoardMember(result) {
-  const pickProps = R.pick(['id', 'title', 'first_name', 'last_name', 'email_shorthand', 'IRC_nick', 'image']);
-
-  return result;
-}
+const mapSubPagesResult = results => R.map(R.pick(['id', 'title', 'category', 'slug']), getData(results));
 
 module.exports = {
   mapNewsResults,
   mapEventsResults,
   mapGuildBoardsResult,
-  mapGuildBoardMeta,
-  mapBoardMember,
+  mapSubPagesResult,
 };
