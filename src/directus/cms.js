@@ -28,6 +28,8 @@ const getActiveItem = (dataType, id, options) => {
   return client.getItem(dataType, id, params);
 };
 
+const createActiveItem = (dataType, data) => client.createItem(dataType, data);
+
 const getActiveFile = (id, options) => {
   const defaultParams = {
     status: ACTIVE,
@@ -106,6 +108,20 @@ const fetchPastEvents = (currentPage) => {
 
   return getActiveItems(dataTypes.events.table, options)
     .then(utils.mapEventsResults);
+};
+
+const fetchEventParticipants = eventId => getActiveItem(dataTypes.events.table, eventId)
+  .then(utils.pickEventParticipants)
+  .then(R.map(R.prop('id')));
+
+const participateEvent = (eventId, memberId) => {
+  const data = {
+    active: 1,
+    member_id: memberId,
+    event_id: eventId,
+  };
+
+  return createActiveItem(dataTypes.eventParticipants.table, data);
 };
 
 const fetchBoardMember = memberId => getActiveItem(dataTypes.boardMembers.table, memberId);
@@ -220,6 +236,8 @@ module.exports = {
   fetchEvents,
   fetchUpcomingEvents,
   fetchPastEvents,
+  fetchEventParticipants,
+  participateEvent,
   fetchSubPages,
   fetchSubPageBySlug,
   fetchGuildBoards,

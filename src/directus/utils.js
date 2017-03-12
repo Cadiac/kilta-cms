@@ -74,6 +74,8 @@ const mapEventsResult = (results) => {
   return mapResults(getData(results));
 };
 
+const pickEventParticipants = results => R.path(['data', 'participants', 'data'], results);
+
 const mapGuildBoardsResult = results => R.map(R.pick(['id', 'title', 'year', 'slug']), getData(results));
 
 const mapSubPagesResult = results => R.map(R.pick(['id', 'title', 'category', 'slug']), getData(results));
@@ -88,4 +90,5 @@ module.exports = {
   mapGuildBoardsResult,
   mapSubPagesResult,
   pickFirstResultData,
+  pickEventParticipants,
 };

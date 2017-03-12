@@ -11,6 +11,7 @@ exports.register = (plugin, options, next) => {
     { method: 'GET', path: '/news/{id}', config: News.getNewsArticle },
     { method: 'GET', path: '/events', config: Events.getEvents },
     { method: 'GET', path: '/events/{id}', config: Events.getEvent },
+    { method: 'POST', path: '/events/{id}', config: Events.participateEvent },
     { method: 'GET', path: '/events/past', config: Events.getPastEvents },
     { method: 'GET', path: '/events/upcoming', config: Events.getUpcomingEvents },
     { method: 'GET', path: '/footer', config: Footer.getFooter },

@@ -8,6 +8,9 @@ module.exports = {
   events: {
     table: 'events',
   },
+  eventParticipants: {
+    table: 'event_participants',
+  },
   footer: {
     table: 'footer',
   },
