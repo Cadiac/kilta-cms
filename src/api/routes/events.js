@@ -3,6 +3,20 @@ const Boom = require('boom');
 
 const cms = require('../../directus/cms');
 
+module.exports.getEvents = {
+  description: 'Get list of all events, latest first',
+  validate: {
+    query: {
+      page: Joi.number().integer().min(0).required(),
+    },
+  },
+  handler(request, reply) {
+    return cms.fetchEvents(request.query.page)
+      .then(reply)
+      .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
+  },
+};
+
 module.exports.getUpcomingEvents = {
   description: 'Get list of upcoming events',
   validate: {

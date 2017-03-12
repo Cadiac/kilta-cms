@@ -3,6 +3,15 @@ const Boom = require('boom');
 
 const cms = require('../../directus/cms');
 
+module.exports.getGuildInformation = {
+  description: 'Get general guild information, such as logo and guild name',
+  handler(request, reply) {
+    return cms.fetchGuildInfo(request.params.slug)
+      .then(reply)
+      .catch(err => reply(Boom.badImplementation(err)));
+  },
+};
+
 module.exports.getGuildBoardByYear = {
   description: 'Get guild board page by year',
   validate: {

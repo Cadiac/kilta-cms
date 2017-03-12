@@ -56,6 +56,19 @@ const fetchNews = (currentPage) => {
     .then(utils.mapNewsResults);
 };
 
+const fetchEvents = (currentPage) => {
+  const options = {
+    sort: 'event_start_time',
+    sort_order: 'ASC',
+    currentPage,
+    perPage,
+  };
+
+  return getActiveItems(dataTypes.events.table, options)
+    .then(utils.mapEventsResults);
+};
+
+
 const fetchUpcomingEvents = (currentPage) => {
   const options = {
     sort: 'event_start_time',
@@ -182,8 +195,22 @@ const fetchSponsors = () => getActiveItems(dataTypes.sponsors.table)
   .then(R.prop('data'))
   .then(sponsors => BPromise.map(sponsors, fetchSponsorsLogo));
 
+const fetchGuildInfo = () => getActiveItems(dataTypes.landingPage.table)
+  .then(utils.pickFirstResultData)
+  .then(info => BPromise.props({
+    main_title: info.main_title,
+    introduction_text: info.introduction_text,
+    guild_name: info.guild_name,
+    guild_logo: getActiveFile(R.prop(['guild_logo'], info)).then(createImageUrl),
+    jumbotron_images: info.jumbotron_images.data.map(image => ({
+      title: image.title,
+      url: config.directusFilesUrl + image.url,
+    })),
+  }));
+
 module.exports = {
   fetchNews,
+  fetchEvents,
   fetchUpcomingEvents,
   fetchPastEvents,
   fetchSubPages,
@@ -192,4 +219,5 @@ module.exports = {
   fetchGuildBoardByYear,
   fetchFooter,
   fetchSponsors,
+  fetchGuildInfo,
 };
