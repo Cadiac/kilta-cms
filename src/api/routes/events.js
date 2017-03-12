@@ -7,11 +7,25 @@ module.exports.getEvents = {
   description: 'Get list of all events, latest first',
   validate: {
     query: {
-      page: Joi.number().integer().min(0).required(),
+      page: Joi.number().integer().min(0),
     },
   },
   handler(request, reply) {
     return cms.fetchEvents(request.query.page)
+      .then(reply)
+      .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
+  },
+};
+
+module.exports.getEvent = {
+  description: 'Get data for single event',
+  validate: {
+    params: {
+      id: Joi.number().integer().min(0).required(),
+    },
+  },
+  handler(request, reply) {
+    return cms.fetchEvent(request.params.id)
       .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
   },

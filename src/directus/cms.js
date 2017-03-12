@@ -44,7 +44,7 @@ const createImageUrl = (image) => {
   return config.directusFilesUrl + (thumbnail || R.path(['data', 'url'], image));
 };
 
-const fetchNews = (currentPage) => {
+const fetchNewsArticles = (currentPage = 0) => {
   const options = {
     sort: 'created_on',
     sort_order: 'DESC',
@@ -56,7 +56,10 @@ const fetchNews = (currentPage) => {
     .then(utils.mapNewsResults);
 };
 
-const fetchEvents = (currentPage) => {
+const fetchNewsArticle = id => getActiveItem(dataTypes.news.table, id)
+  .then(utils.mapNewsResult);
+
+const fetchEvents = (currentPage = 0) => {
   const options = {
     sort: 'event_start_time',
     sort_order: 'ASC',
@@ -68,6 +71,8 @@ const fetchEvents = (currentPage) => {
     .then(utils.mapEventsResults);
 };
 
+const fetchEvent = id => getActiveItem(dataTypes.events.table, id)
+  .then(utils.mapEventsResult);
 
 const fetchUpcomingEvents = (currentPage) => {
   const options = {
@@ -209,7 +214,9 @@ const fetchGuildInfo = () => getActiveItems(dataTypes.landingPage.table)
   }));
 
 module.exports = {
-  fetchNews,
+  fetchNewsArticle,
+  fetchNewsArticles,
+  fetchEvent,
   fetchEvents,
   fetchUpcomingEvents,
   fetchPastEvents,

@@ -7,8 +7,10 @@ const Sponsors = require('./routes/sponsors');
 exports.register = (plugin, options, next) => {
   plugin.route([
     { method: 'GET', path: '/info', config: Pages.getGuildInformation },
-    { method: 'GET', path: '/news', config: News.getNews },
+    { method: 'GET', path: '/news', config: News.getNewsArticles },
+    { method: 'GET', path: '/news/{id}', config: News.getNewsArticle },
     { method: 'GET', path: '/events', config: Events.getEvents },
+    { method: 'GET', path: '/events/{id}', config: Events.getEvent },
     { method: 'GET', path: '/events/past', config: Events.getPastEvents },
     { method: 'GET', path: '/events/upcoming', config: Events.getUpcomingEvents },
     { method: 'GET', path: '/footer', config: Footer.getFooter },
