@@ -37,6 +37,11 @@ module.exports.getSubPages = {
 
 module.exports.getSubPageBySlug = {
   description: 'Get sub page by slug',
+  validate: {
+    params: {
+      slug: Joi.string().regex(/^[a-z0-9-]+$/),
+    },
+  },
   handler(request, reply) {
     return cms.fetchSubPageBySlug(request.params.slug)
       .then(reply)

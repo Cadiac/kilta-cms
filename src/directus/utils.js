@@ -47,9 +47,12 @@ const mapGuildBoardsResult = results => R.map(R.pick(['id', 'title', 'year', 'sl
 
 const mapSubPagesResult = results => R.map(R.pick(['id', 'title', 'category', 'slug']), getData(results));
 
+const pickFirstResultData = R.compose(R.head, R.prop('data'));
+
 module.exports = {
   mapNewsResults,
   mapEventsResults,
   mapGuildBoardsResult,
   mapSubPagesResult,
+  pickFirstResultData,
 };

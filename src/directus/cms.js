@@ -37,6 +37,13 @@ const getActiveFile = (id, options) => {
   return client.getFile(id, params);
 };
 
+const createImageUrl = (image) => {
+  const thumbnail = R.path(['data', 'thumbnail_url'], image);
+
+  // Use thumbnail if available - svgs or other vector formats don't have one
+  return config.directusFilesUrl + (thumbnail || R.path(['data', 'url'], image));
+};
+
 const fetchNews = (currentPage) => {
   const options = {
     sort: 'created_on',
@@ -88,7 +95,7 @@ const fetchBoardMember = memberId => getActiveItem(dataTypes.boardMembers.table,
 const fetchBoardMemberImage = member => BPromise.props(
   R.merge(member, {
     image: getActiveFile(R.prop(['image'], member))
-      .then(image => config.directusFilesUrl + R.path(['data', 'thumbnail_url'], image)),
+      .then(createImageUrl),
   }));
 
 const fetchGuildBoards = () => {
@@ -113,7 +120,7 @@ const fetchGuildBoardByYear = (year) => {
   };
 
   return getActiveItems(dataTypes.guildBoard.table, options)
-    .then(R.compose(R.head, R.prop('data')))
+    .then(utils.pickFirstResultData)
     .then(data => BPromise.props({
       meta: R.pick(['text', 'title', 'year', 'slug', 'board_members_title', 'board_officials_title'], data),
       chairman: fetchBoardMember(data.chairman)
@@ -128,7 +135,14 @@ const fetchLinkLogo = link => BPromise.props({
   link: R.prop('link', link),
   name: R.prop('name', link),
   logo: getActiveFile(R.prop('logo', link))
-    .then(logo => config.directusFilesUrl + R.path(['data', 'thumbnail_url'], logo)),
+    .then(createImageUrl),
+});
+
+const fetchSponsorsLogo = sponsor => BPromise.props({
+  name: R.prop('name', sponsor),
+  website: R.prop('website', sponsor),
+  logo: getActiveFile(R.prop('logo', sponsor))
+    .then(createImageUrl),
 });
 
 const fetchSubPages = () => getActiveItems(dataTypes.categories.table)
@@ -149,12 +163,12 @@ const fetchSubPageBySlug = (slug) => {
   };
 
   return getActiveItems(dataTypes.subpages.table, options)
-    .then(R.compose(R.head, R.prop('data')))
+    .then(utils.pickFirstResultData)
     .then(R.pick(['title', 'slug', 'text', 'category_id']));
 };
 
 const fetchFooter = () => getActiveItems(dataTypes.footer.table)
-  .then(R.compose(R.head, R.prop('data')))
+  .then(utils.pickFirstResultData)
   .then(R.pick(['contact_info', 'other_links', 'social_media_buttons']))
   .then(footer => BPromise.props({
     contact_info: footer.contact_info,
@@ -163,6 +177,10 @@ const fetchFooter = () => getActiveItems(dataTypes.footer.table)
       footer.social_media_buttons.data,
       fetchLinkLogo),
   }));
+
+const fetchSponsors = () => getActiveItems(dataTypes.sponsors.table)
+  .then(R.prop('data'))
+  .then(sponsors => BPromise.map(sponsors, fetchSponsorsLogo));
 
 module.exports = {
   fetchNews,
@@ -173,4 +191,5 @@ module.exports = {
   fetchGuildBoards,
   fetchGuildBoardByYear,
   fetchFooter,
+  fetchSponsors,
 };

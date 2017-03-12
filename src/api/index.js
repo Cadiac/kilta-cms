@@ -2,6 +2,7 @@ const News = require('./routes/news');
 const Events = require('./routes/events');
 const Pages = require('./routes/pages');
 const Footer = require('./routes/footer');
+const Sponsors = require('./routes/sponsors');
 
 exports.register = (plugin, options, next) => {
   plugin.route([
@@ -13,6 +14,7 @@ exports.register = (plugin, options, next) => {
     { method: 'GET', path: '/pages/boards', config: Pages.getGuildBoards },
     { method: 'GET', path: '/pages/boards/{year}', config: Pages.getGuildBoardByYear },
     { method: 'GET', path: '/footer', config: Footer.getFooter },
+    { method: 'GET', path: '/sponsors', config: Sponsors.getSponsors },
   ]);
 
   next();
