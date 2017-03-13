@@ -1,6 +1,9 @@
 # Kilta CMS
 
 ## Quick Start
+
+Copy `.env.sample` into `.env`, and setup your secrets. Source the env variables, and run
+
 ```bash
 # Start mysql
 docker run -e MYSQL_ROOT_PASSWORD=$DIRECTUS_ROOT_PASSWORD -e MYSQL_DATABASE=$DIRECTUS_DATABASE -e MYSQL_USER=$DIRECTUS_USER \
@@ -11,10 +14,14 @@ docker exec -i mysql mysql -uroot "-p$DIRECTUS_ROOT_PASSWORD" $DIRECTUS_DATABASE
 
 # Start directus
 docker run --link mysql:mysql -p 8080:8080 --name directus -d getdirectus/directus:6.3
+
+# Start web backend
+npm start
 ```
 
 ## Directus Login Credentials
 
+Default credentials are
 - Email: **admin@admin.com**
 - password: **admin**
 
