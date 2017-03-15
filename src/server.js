@@ -11,16 +11,13 @@ server.connection({
   port: config.port,
 });
 
+const validate = (decoded, request, callback) => {
+  return callback(null, false);
+};
+
 // Register api and plugins
 server.register([
   {
-    // api
-    register: require('./api'),
-    options: {},
-    routes: {
-      prefix: '/api/v1',
-    },
-  }, {
     // logging
     register: require('good'),
     options: require('./config/logging'),
@@ -36,11 +33,32 @@ server.register([
     // api documentation
     register: require('lout'),
     options: {},
+  }, {
+    // JWT authentication
+    register: require('hapi-auth-jwt2'),
+    options: {},
   }], {}, (err) => {
     if (err) {
       throw err;
     }
   });
+
+server.auth.strategy('jwt', 'jwt', {
+  key: 'NeverShareYourSecret',
+  validateFunc: validate,
+  verifyOptions: { algorithms: ['HS256'] },
+});
+
+// server.auth.default('jwt');
+
+server.register({
+  // api
+  register: require('./api'),
+  options: {},
+  routes: {
+    prefix: '/api/v1',
+  },
+});
 
 server.start(() => {
   console.log('Server running at:', server.info.uri);

@@ -61,6 +61,7 @@ module.exports.getPastEvents = {
 };
 
 module.exports.participateEvent = {
+  auth: 'jwt',
   description: 'Participate event as current user',
   validate: {
     params: {
