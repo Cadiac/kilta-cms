@@ -1,19 +1,16 @@
 /* eslint-disable global-require */
 
 const config = require('./config/config');
+const auth = require('./services/auth');
 const Hapi = require('hapi');
 
 const server = new Hapi.Server();
 
 // allow port configuration through argv
 server.connection({
-  host: 'localhost',
+  host: config.host,
   port: config.port,
 });
-
-const validate = (decoded, request, callback) => {
-  return callback(null, false);
-};
 
 // Register api and plugins
 server.register([
@@ -44,12 +41,10 @@ server.register([
   });
 
 server.auth.strategy('jwt', 'jwt', {
-  key: 'NeverShareYourSecret',
-  validateFunc: validate,
+  key: config.apiSecretKey,
+  validateFunc: auth.validateToken,
   verifyOptions: { algorithms: ['HS256'] },
 });
-
-// server.auth.default('jwt');
 
 server.register({
   // api

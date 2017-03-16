@@ -23,6 +23,7 @@
   "author": "Jaakko Husso (jaakko.husso@futurice.com)",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "blipp": "^2.3.0",
     "bluebird": "^3.5.0",
     "boom": "^4.2.0",
@@ -34,6 +35,7 @@
     "hapi-auth-jwt2": "^7.2.4",
     "inert": "^4.1.0",
     "joi": "^10.2.2",
+    "jsonwebtoken": "^7.3.0",
     "lout": "^9.2.0",
     "ramda": "^0.23.0",
     "vision": "^4.1.1"

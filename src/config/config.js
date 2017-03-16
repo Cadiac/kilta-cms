@@ -6,6 +6,8 @@ const config = {
   directusApiUrl: process.env.DIRECTUS_API_URL,
   directusFilesUrl: process.env.DIRECTUS_FILES_URL,
   port: Number(process.env.PORT || 8080),
+  host: process.env.HOST || 'localhost',
+  apiSecretKey: process.env.API_SECRET_KEY,
 };
 
 module.exports = config;

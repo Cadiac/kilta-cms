@@ -1,3 +1,4 @@
+const Auth = require('./routes/auth');
 const News = require('./routes/news');
 const Events = require('./routes/events');
 const Pages = require('./routes/pages');
@@ -6,6 +7,7 @@ const Sponsors = require('./routes/sponsors');
 
 exports.register = (plugin, options, next) => {
   plugin.route([
+    { method: 'POST', path: '/auth/login', config: Auth.login },
     { method: 'GET', path: '/info', config: Pages.getGuildInformation },
     { method: 'GET', path: '/news', config: News.getNewsArticles },
     { method: 'GET', path: '/news/{id}', config: News.getNewsArticle },

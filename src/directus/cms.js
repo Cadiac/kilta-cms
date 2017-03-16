@@ -229,6 +229,21 @@ const fetchGuildInfo = () => getActiveItems(dataTypes.landingPage.table)
     })),
   }));
 
+const fetchMember = id => getActiveItem(dataTypes.members.table, id);
+
+const fetchMemberByUsername = (username) => {
+  const options = {
+    filters: {
+      username: {
+        '=': username,
+      },
+    },
+  };
+
+  return getActiveItems(dataTypes.members.table, options)
+    .then(utils.pickFirstResultData);
+};
+
 module.exports = {
   fetchNewsArticle,
   fetchNewsArticles,
@@ -245,4 +260,6 @@ module.exports = {
   fetchFooter,
   fetchSponsors,
   fetchGuildInfo,
+  fetchMember,
+  fetchMemberByUsername,
 };
