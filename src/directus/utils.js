@@ -1,5 +1,7 @@
 const R = require('ramda');
 
+// TODO: This is a mess, get rid of this file
+
 const getData = R.prop('data');
 const getAuthors = R.path(['authors', 'data']);
 const getParticipants = R.path(['participants', 'data']);

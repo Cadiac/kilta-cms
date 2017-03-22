@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 
-const cms = require('../../directus/cms');
+const newsService = require('../../services/news');
 
 module.exports.getNewsArticles = {
   description: 'Get list of news',
@@ -11,7 +11,7 @@ module.exports.getNewsArticles = {
     },
   },
   handler(request, reply) {
-    return cms.fetchNewsArticles(request.query.page)
+    return newsService.fetchNewsArticles(request.query.page)
       .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
   },
@@ -25,7 +25,7 @@ module.exports.getNewsArticle = {
     },
   },
   handler(request, reply) {
-    return cms.fetchNewsArticle(request.params.id)
+    return newsService.fetchNewsArticle(request.params.id)
       .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
   },
