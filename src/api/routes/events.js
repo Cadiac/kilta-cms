@@ -13,7 +13,12 @@ module.exports.getEvent = {
   },
   handler(request, reply) {
     return eventService.fetchEvent(request.params.id)
-      .then(reply)
+      .then((event) => {
+        if (R.isEmpty(event)) {
+          return reply(Boom.notFound());
+        }
+        return reply(event);
+      })
       .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
   },
 };
@@ -69,16 +74,21 @@ module.exports.participateEvent = {
     },
   },
   handler(request, reply) {
-    return eventService.fetchEventParticipants(request.params.id)
-      .then((participants) => {
-        // TODO: Fetch current member
-        const memberId = 4;
-        if (R.contains(memberId, participants)) {
-          return reply('You have already registered for this event!').code(400);
+    return eventService.fetchEvent(request.params.id)
+      .then((event) => {
+        if (R.isEmpty(event)) {
+          return reply(Boom.notFound(`Event ${request.params.id} was not found`));
         }
-        return eventService.participateEvent(request.params.id, 4);
+        return event;
+      })
+      .then(() => eventService.fetchEventParticipants(request.params.id))
+      .then((participants) => {
+        if (R.contains(request.auth.credentials.id, participants)) {
+          return reply(Boom.badRequest('You have already registered for this event!'));
+        }
+        return eventService.participateEvent(request.params.id, request.auth.credentials.id);
       })
       .then(() => reply('Registration successful').code(201))
-      .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
+      .catch(err => reply(Boom.badImplementation('Event participation failed', err)));
   },
 };

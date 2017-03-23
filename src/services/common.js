@@ -41,13 +41,18 @@ const fetchSubPageBySlug = (slug) => {
 const fetchFooter = () => cms.getActiveItems(dataTypes.footer.table)
   .then(utils.pickFirstResultData)
   .then(R.pick(['contact_info', 'other_links', 'social_media_buttons']))
-  .then(footer => BPromise.props({
-    contact_info: footer.contact_info,
-    other_links: R.map(R.pick(['title', 'link']), footer.other_links.data),
-    social_media_buttons: BPromise.map(
-      footer.social_media_buttons.data,
-      fetchLinkLogo),
-  }));
+  .then((footer) => {
+    if (R.isEmpty(footer)) {
+      return footer;
+    }
+    return BPromise.props({
+      contact_info: footer.contact_info,
+      other_links: R.map(R.pick(['title', 'link']), footer.other_links.data),
+      social_media_buttons: BPromise.map(
+        footer.social_media_buttons.data,
+        fetchLinkLogo),
+    });
+  });
 
 const fetchSponsors = () => cms.getActiveItems(dataTypes.sponsors.table)
   .then(R.prop('data'))

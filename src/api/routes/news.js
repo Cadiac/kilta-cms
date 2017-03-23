@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const Boom = require('boom');
+const R = require('ramda');
 
 const newsService = require('../../services/news');
 
@@ -26,7 +27,12 @@ module.exports.getNewsArticle = {
   },
   handler(request, reply) {
     return newsService.fetchNewsArticle(request.params.id)
-      .then(reply)
+      .then((news) => {
+        if (R.isEmpty(news)) {
+          return reply(Boom.notFound(`News article ${request.params.id} was not found!`));
+        }
+        return reply(news);
+      })
       .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
   },
 };

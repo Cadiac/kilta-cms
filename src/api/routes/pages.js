@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const Boom = require('boom');
+const R = require('ramda');
 
 const commonService = require('../../services/common');
 const guildService = require('../../services/guild');
@@ -8,7 +9,12 @@ module.exports.getGuildInformation = {
   description: 'Get general guild information, such as logo and guild name',
   handler(request, reply) {
     return guildService.fetchGuildInfo(request.params.slug)
-      .then(reply)
+      .then((guild) => {
+        if (R.isEmpty(guild)) {
+          return reply(Boom.notFound('Guild info ("Landing Page") is missing!'));
+        }
+        return reply(guild);
+      })
       .catch(err => reply(Boom.badImplementation(err)));
   },
 };
@@ -22,7 +28,12 @@ module.exports.getGuildBoardByYear = {
   },
   handler(request, reply) {
     return guildService.fetchGuildBoardByYear(request.params.year)
-      .then(reply)
+      .then((board) => {
+        if (R.isEmpty(board)) {
+          return reply(Boom.notFound());
+        }
+        return reply(board);
+      })
       .catch(err => reply(Boom.badImplementation(err)));
   },
 };
@@ -54,6 +65,13 @@ module.exports.getSubPageBySlug = {
   },
   handler(request, reply) {
     return commonService.fetchSubPageBySlug(request.params.slug)
+      .then((page) => {
+        if (R.isEmpty(page)) {
+          return reply(Boom.notFound());
+        }
+
+        return reply(page);
+      })
       .then(reply)
       .catch(err => reply(Boom.badImplementation(err)));
   },

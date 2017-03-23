@@ -53,6 +53,10 @@ const mapEventsResults = (results) => {
 };
 
 const mapEventsResult = (results) => {
+  const data = getData(results);
+  if (R.isEmpty(data)) {
+    return {};
+  }
   const eventProps = [
     'id',
     'title',
@@ -82,7 +86,7 @@ const mapGuildBoardsResult = results => R.map(R.pick(['id', 'title', 'year', 'sl
 
 const mapSubPagesResult = results => R.map(R.pick(['id', 'title', 'category', 'slug']), getData(results));
 
-const pickFirstResultData = R.compose(R.head, R.prop('data'));
+const pickFirstResultData = R.compose(R.defaultTo({}), R.head, R.prop('data'));
 
 module.exports = {
   mapNewsResult,

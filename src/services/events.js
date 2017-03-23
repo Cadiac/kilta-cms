@@ -16,7 +16,12 @@ const fetchEvents = (currentPage = 0) => {
 };
 
 const fetchEvent = id => cms.getActiveItem(dataTypes.events.table, id)
-  .then(utils.mapEventsResult);
+  .then((event) => {
+    if (R.isEmpty(event)) {
+      return event;
+    }
+    return utils.mapEventsResult(event);
+  });
 
 const fetchUpcomingEvents = (currentPage = 0) => {
   const options = {
@@ -53,6 +58,12 @@ const fetchPastEvents = (currentPage = 0) => {
 };
 
 const fetchEventParticipants = eventId => cms.getActiveItem(dataTypes.events.table, eventId)
+  .then((event) => {
+    if (R.isEmpty(R.prop('data', event))) {
+      throw new Error('Empty event!');
+    }
+    return event;
+  })
   .then(utils.pickEventParticipants)
   .then(R.map(R.prop('id')));
 

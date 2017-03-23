@@ -2,11 +2,11 @@ const jsonwebtoken = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const R = require('ramda');
 
-const cms = require('../directus/cms');
+const memberService = require('./members');
 const { apiSecretKey } = require('../config/config');
 
 const validateToken = (decoded, request, callback) =>
-  cms.fetchMember(decoded.id)
+  memberService.fetchMember(decoded.id)
     .then((member) => {
       if (!member) {
         return callback(null, false);
@@ -26,7 +26,7 @@ const renameHashAlgorithm = (hash) => {
 };
 
 const validatePassword = (username, password) =>
-  cms.fetchMemberByUsername(username)
+  memberService.fetchMemberByUsername(username)
     .then((member) => {
       if (!member || !member.password) {
         return false;

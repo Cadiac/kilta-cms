@@ -1,3 +1,4 @@
+const R = require('ramda');
 const { utils, dataTypes, cms, constants } = require('../directus');
 
 const { perPage } = constants;
@@ -15,7 +16,12 @@ const fetchNewsArticles = (currentPage = 0) => {
 };
 
 const fetchNewsArticle = id => cms.getActiveItem(dataTypes.news.table, id)
-  .then(utils.mapNewsResult);
+  .then((news) => {
+    if (R.isEmpty(news.data)) {
+      return news.data;
+    }
+    return utils.mapNewsResult(news);
+  });
 
 module.exports = {
   fetchNewsArticles,
