@@ -42,10 +42,16 @@ const createImageUrl = (image) => {
   return config.directusFilesUrl + (thumbnail || R.path(['data', 'url'], image));
 };
 
+const updateItem = (dataType, id, data) => client.updateItem(dataType, id, data);
+
+const deleteItem = (dataType, id) => client.deleteItem(dataType, id);
+
 module.exports = {
   getActiveItem,
   getActiveItems,
   getActiveFile,
   createActiveItem,
   createImageUrl,
+  updateItem,
+  deleteItem,
 };
