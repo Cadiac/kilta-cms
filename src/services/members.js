@@ -1,3 +1,4 @@
+const R = require('ramda');
 const { utils, dataTypes, cms } = require('../directus');
 
 const fetchMember = id => cms.getActiveItem(dataTypes.members.table, id);
@@ -15,7 +16,11 @@ const fetchMemberByUsername = (username) => {
     .then(utils.pickFirstResultData);
 };
 
+const fetchMemberWithoutSensitiveData = id => fetchMember(id)
+  .then(utils.mapMemberResult);
+
 module.exports = {
   fetchMember,
   fetchMemberByUsername,
+  fetchMemberWithoutSensitiveData,
 };

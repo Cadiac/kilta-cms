@@ -88,6 +88,11 @@ const mapSubPagesResult = results => R.map(R.pick(['id', 'title', 'category', 's
 
 const pickFirstResultData = R.compose(R.defaultTo({}), R.head, R.prop('data'));
 
+const mapMemberResult = results => R.pick(
+  ['username', 'first_name', 'last_name', 'email', 'phone', 'role'],
+  getData(results));
+
+
 module.exports = {
   mapNewsResult,
   mapNewsResults,
@@ -95,6 +100,7 @@ module.exports = {
   mapEventsResults,
   mapGuildBoardsResult,
   mapSubPagesResult,
+  mapMemberResult,
   pickFirstResultData,
   pickEventParticipants,
 };
