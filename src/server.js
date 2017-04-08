@@ -10,6 +10,9 @@ const server = new Hapi.Server();
 server.connection({
   host: config.host,
   port: config.port,
+  routes: {
+    cors: true,
+  },
 });
 
 // Register api and plugins
