@@ -36,10 +36,14 @@ const getActiveFile = (id, options) => {
 };
 
 const createImageUrl = (image) => {
-  const thumbnail = R.path(['data', 'thumbnail_url'], image);
+  const url = R.path(['data', 'url'], image);
+  const thumbnail = R.path(['data', 'thumbnail'], image);
 
-  // Use thumbnail if available - svgs or other vector formats don't have one
-  return config.directusFilesUrl + (thumbnail || R.path(['data', 'url'], image));
+  // SVGs or other vector formats don't have thumbnails.
+  return {
+    url: config.directusFilesUrl + url,
+    thumbnail: config.directusFilesUrl + (thumbnail || url),
+  };
 };
 
 const updateItem = (dataType, id, data) => client.updateItem(dataType, id, data);
