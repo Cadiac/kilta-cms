@@ -17,7 +17,7 @@ module.exports.login = {
         if (!member) {
           return reply('Unauthorized').code(403);
         }
-        return reply(authService.getToken(member));
+        return reply({ token: authService.getToken(member) });
       })
       .catch(err => reply(Boom.badImplementation('Login failed', err)));
   },

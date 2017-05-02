@@ -43,7 +43,7 @@ const validatePassword = (username, password) =>
     });
 
 const getToken = member => jsonwebtoken.sign(
-  R.pick(['id', 'role'], member),
+  R.pick(['id', 'role', 'username'], member),
   apiSecretKey,
   { expiresIn: '24h' });
 

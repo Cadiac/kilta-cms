@@ -11,7 +11,9 @@ server.connection({
   host: config.host,
   port: config.port,
   routes: {
-    cors: true,
+    cors: {
+      credentials: true,
+    },
   },
 });
 
