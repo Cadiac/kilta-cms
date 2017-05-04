@@ -25,7 +25,7 @@ exports.register = (plugin, options, next) => {
     { method: 'GET', path: '/pages/boards', config: Pages.getGuildBoards },
     { method: 'GET', path: '/pages/boards/{year}', config: Pages.getGuildBoardByYear },
     { method: 'GET', path: '/members/me', config: Members.getCurrentUser },
-    { method: 'PATCH', path: '/members/me', config: Members.updateCurrentUser },
+    { method: 'PUT', path: '/members/me', config: Members.updateCurrentUser },
     { method: 'DELETE', path: '/members/me', config: Members.deleteCurrentUser },
   ]);
 
