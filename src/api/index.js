@@ -11,6 +11,7 @@ exports.register = (plugin, options, next) => {
     { method: 'POST', path: '/auth/login', config: Auth.login },
     { method: 'GET', path: '/info', config: Pages.getGuildInformation },
     { method: 'GET', path: '/news', config: News.getNewsArticles },
+    { method: 'GET', path: '/news/categories', config: News.getNewsCategories },
     { method: 'GET', path: '/news/{id}', config: News.getNewsArticle },
     { method: 'GET', path: '/events', config: Events.getEvents },
     { method: 'GET', path: '/events/{id}', config: Events.getEvent },

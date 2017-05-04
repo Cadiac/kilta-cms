@@ -23,7 +23,17 @@ const fetchNewsArticle = id => cms.getActiveItem(dataTypes.news.table, id)
     return utils.mapNewsResult(news);
   });
 
+const fetchNewsCategories = () => {
+  const options = {
+    columns: 'title,slug,id',
+  };
+
+  return cms.getActiveItems(dataTypes.newsCategories.table, options)
+    .then(categories => categories.data);
+};
+
 module.exports = {
   fetchNewsArticles,
   fetchNewsArticle,
+  fetchNewsCategories,
 };

@@ -36,3 +36,17 @@ module.exports.getNewsArticle = {
       .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
   },
 };
+
+module.exports.getNewsCategories = {
+  description: 'Get list of news categories',
+  handler(request, reply) {
+    return newsService.fetchNewsCategories()
+      .then((categories) => {
+        if (R.isEmpty(categories)) {
+          return reply(Boom.notFound('No categories found!'));
+        }
+        return reply(categories);
+      })
+      .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
+  },
+};
