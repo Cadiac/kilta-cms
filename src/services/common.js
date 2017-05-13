@@ -18,11 +18,19 @@ const fetchSponsorsLogo = sponsor => BPromise.props({
 
 const fetchSubPages = () => cms.getActiveItems(dataTypes.categories.table)
   .then(R.prop('data'))
-  .then(R.filter(R.compose(R.not, R.isEmpty, R.path(['subpages', 'data']))))
-  .then(R.map(R.pick(['id', 'title', 'slug', 'subpages'])))
+  .then(categories => categories.filter(category =>
+    R.or(
+      R.not(R.isEmpty(R.path(['subpages', 'data'], category))),
+      R.not(R.isEmpty(R.path(['boards', 'data'], category)))
+    )
+  ))
   .then(R.map(category => R.merge(category, {
-    subpages: R.map(R.pick(['category_id', 'title', 'slug', 'priority']), category.subpages.data),
-  })));
+    subpages: R.concat(
+      R.map(R.pick(['category_id', 'title', 'slug', 'priority']), category.subpages.data),
+      R.map(R.pick(['category_id', 'title', 'slug', 'priority']), category.boards.data)
+    )
+  })))
+  .then(R.map(R.pick(['id', 'title', 'slug', 'subpages'])));
 
 const fetchSubPageBySlug = (slug) => {
   const options = {
