@@ -25,12 +25,10 @@ const fetchSubPages = () => cms.getActiveItems(dataTypes.categories.table)
     )
   ))
   .then(R.map(category => R.merge(category, {
-    subpages: R.concat(
-      R.map(R.pick(['category_id', 'title', 'slug', 'priority']), category.subpages.data),
-      R.map(R.pick(['category_id', 'title', 'slug', 'priority']), category.boards.data)
-    )
+    subpages: R.map(R.pick(['category_id', 'title', 'slug', 'priority']), category.subpages.data),
+    boards: R.map(R.pick(['category_id', 'title', 'slug', 'priority']), category.boards.data)
   })))
-  .then(R.map(R.pick(['id', 'title', 'slug', 'subpages'])));
+  .then(R.map(R.pick(['id', 'title', 'slug', 'subpages', 'boards'])));
 
 const fetchSubPageBySlug = (slug) => {
   const options = {
