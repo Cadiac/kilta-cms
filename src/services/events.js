@@ -3,18 +3,6 @@ const R = require('ramda');
 
 const { perPage } = constants;
 
-const fetchEvents = (currentPage = 0) => {
-  const options = {
-    sort: 'event_start_time',
-    sort_order: 'ASC',
-    currentPage,
-    perPage,
-  };
-
-  return cms.getActiveItems(dataTypes.events.table, options)
-    .then(utils.mapEventsResults);
-};
-
 const fetchEvent = id => cms.getActiveItem(dataTypes.events.table, id)
   .then((event) => {
     if (R.isEmpty(event)) {
@@ -23,12 +11,24 @@ const fetchEvent = id => cms.getActiveItem(dataTypes.events.table, id)
     return utils.mapEventsResult(event);
   });
 
-const fetchUpcomingEvents = (currentPage = 0) => {
+const fetchEvents = (currentPage = 0, limit = perPage) => {
   const options = {
     sort: 'event_start_time',
     sort_order: 'ASC',
     currentPage,
-    perPage,
+    perPage: limit,
+  };
+
+  return cms.getActiveItems(dataTypes.events.table, options)
+    .then(utils.mapEventsResults);
+};
+
+const fetchUpcomingEvents = (currentPage = 0, limit = perPage) => {
+  const options = {
+    sort: 'event_start_time',
+    sort_order: 'ASC',
+    currentPage,
+    perPage: limit,
     filters: {
       event_end_time: {
         '>=': new Date().toISOString(),
@@ -40,12 +40,12 @@ const fetchUpcomingEvents = (currentPage = 0) => {
     .then(utils.mapEventsResults);
 };
 
-const fetchPastEvents = (currentPage = 0) => {
+const fetchPastEvents = (currentPage = 0, limit = perPage) => {
   const options = {
     sort: 'event_start_time',
     sort_order: 'ASC',
     currentPage,
-    perPage,
+    perPage: limit,
     filters: {
       event_end_time: {
         '<': new Date().toISOString(),

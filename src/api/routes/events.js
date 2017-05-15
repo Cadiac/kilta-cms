@@ -28,10 +28,11 @@ module.exports.getEvents = {
   validate: {
     query: {
       page: Joi.number().integer().min(0),
+      limit: Joi.number().integer().min(1).max(100),
     },
   },
   handler(request, reply) {
-    return eventService.fetchEvents(request.query.page)
+    return eventService.fetchEvents(request.query.page, request.query.limit)
       .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
   },
@@ -42,10 +43,11 @@ module.exports.getUpcomingEvents = {
   validate: {
     query: {
       page: Joi.number().integer().min(0),
+      limit: Joi.number().integer().min(1).max(100),
     },
   },
   handler(request, reply) {
-    return eventService.fetchUpcomingEvents(request.query.page)
+    return eventService.fetchUpcomingEvents(request.query.page, request.query.limit)
       .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
   },
@@ -56,10 +58,11 @@ module.exports.getPastEvents = {
   validate: {
     query: {
       page: Joi.number().integer().min(0),
+      limit: Joi.number().integer().min(1).max(100),
     },
   },
   handler(request, reply) {
-    return eventService.fetchPastEvents(request.query.page)
+    return eventService.fetchPastEvents(request.query.page, request.query.limit)
       .then(reply)
       .catch(err => reply(Boom.badImplementation('Fetching events failed', err)));
   },
