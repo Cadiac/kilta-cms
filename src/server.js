@@ -3,8 +3,22 @@
 const config = require('./config/config');
 const auth = require('./services/auth');
 const Hapi = require('hapi');
+const cacheService = require('./services/cache');
 
-const server = new Hapi.Server();
+const server = new Hapi.Server({
+  cache: [
+    {
+      name: 'redisCache',
+      engine: require('catbox-redis'),
+      host: '127.0.0.1',
+      partition: 'cache'
+    }
+  ]
+});
+
+cacheService.initCaches(server, () => {
+  console.log('Cache initialized successfully');
+});
 
 // allow port configuration through argv
 server.connection({
