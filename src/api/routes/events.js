@@ -4,7 +4,7 @@ const R = require('ramda');
 
 const eventService = require('../../services/events');
 
-const getEvent = {
+module.exports.getEvent = {
   description: 'Get data for single event',
   validate: {
     params: {
@@ -12,7 +12,7 @@ const getEvent = {
     },
   },
   handler: (request, reply) =>
-    this.server.methods.fetchEvent(request.params.id, (err, event) => {
+    request.server.methods.fetchEvent(request.params.id, (err, event) => {
       if (err) {
         return reply(Boom.badImplementation('Fetching events failed', err));
       }
@@ -23,7 +23,7 @@ const getEvent = {
     })
 };
 
-const getEvents = {
+module.exports.getEvents = {
   description: 'Get list of all events, latest first',
   validate: {
     query: {
@@ -32,7 +32,7 @@ const getEvents = {
     },
   },
   handler: (request, reply) =>
-    this.server.methods.fetchEvents(request.query.page, request.query.limit,
+    request.server.methods.fetchEvents(request.query.page, request.query.limit,
       (err, events) => {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
@@ -41,7 +41,7 @@ const getEvents = {
       })
 };
 
-const getUpcomingEvents = {
+module.exports.getUpcomingEvents = {
   description: 'Get list of upcoming events',
   validate: {
     query: {
@@ -50,7 +50,7 @@ const getUpcomingEvents = {
     },
   },
   handler: (request, reply) =>
-    this.server.methods.fetchUpcomingEvents(request.query.page, request.query.limit,
+    request.server.methods.fetchUpcomingEvents(request.query.page, request.query.limit,
       (err, events) => {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
@@ -59,7 +59,7 @@ const getUpcomingEvents = {
       })
 };
 
-const getPastEvents = {
+module.exports.getPastEvents = {
   description: 'Get list of past events',
   validate: {
     query: {
@@ -68,7 +68,7 @@ const getPastEvents = {
     },
   },
   handler: (request, reply) =>
-    this.server.methods.fetchPastEvents(request.query.page, request.query.limit,
+    request.server.methods.fetchPastEvents(request.query.page, request.query.limit,
       (err, events) => {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
@@ -77,7 +77,7 @@ const getPastEvents = {
       })
 };
 
-const participateEvent = {
+module.exports.participateEvent = {
   auth: 'jwt',
   description: 'Participate event as current user',
   validate: {
@@ -103,18 +103,4 @@ const participateEvent = {
       .then(() => reply('Registration successful').code(201))
       .catch(err => reply(Boom.badImplementation('Event participation failed', err)));
   },
-};
-
-module.exports = (server) => {
-  this.server = server;
-
-  // cached
-  this.getEvent = getEvent;
-  this.getEvents = getEvents;
-  this.getUpcomingEvents = getUpcomingEvents;
-  this.getPastEvents = getPastEvents;
-
-  this.participateEvent = participateEvent;
-
-  return this;
 };

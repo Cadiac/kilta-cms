@@ -7,19 +7,17 @@ const Sponsors = require('./routes/sponsors');
 const Members = require('./routes/members');
 
 exports.register = (plugin, options, next) => {
-  const events = Events(plugin);
-
   plugin.route([
     { method: 'POST', path: '/auth/login', config: Auth.login },
     { method: 'GET', path: '/info', config: Pages.getGuildInformation },
     { method: 'GET', path: '/news', config: News.getNewsArticles },
     { method: 'GET', path: '/news/categories', config: News.getNewsCategories },
     { method: 'GET', path: '/news/{id}', config: News.getNewsArticle },
-    { method: 'GET', path: '/events', config: events.getEvents },
-    { method: 'GET', path: '/events/{id}', config: events.getEvent },
-    { method: 'POST', path: '/events/{id}', config: events.participateEvent },
-    { method: 'GET', path: '/events/past', config: events.getPastEvents },
-    { method: 'GET', path: '/events/upcoming', config: events.getUpcomingEvents },
+    { method: 'GET', path: '/events', config: Events.getEvents },
+    { method: 'GET', path: '/events/{id}', config: Events.getEvent },
+    { method: 'POST', path: '/events/{id}', config: Events.participateEvent },
+    { method: 'GET', path: '/events/past', config: Events.getPastEvents },
+    { method: 'GET', path: '/events/upcoming', config: Events.getUpcomingEvents },
     { method: 'GET', path: '/footer', config: Footer.getFooter },
     { method: 'GET', path: '/sponsors', config: Sponsors.getSponsors },
     { method: 'GET', path: '/pages', config: Pages.getSubPages },

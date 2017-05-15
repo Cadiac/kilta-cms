@@ -5,9 +5,16 @@ const config = {
   directusApiKey: process.env.DIRECTUS_API_KEY,
   directusApiUrl: process.env.DIRECTUS_API_URL,
   directusFilesUrl: process.env.DIRECTUS_FILES_URL,
+
   port: Number(process.env.PORT || 8080),
   host: process.env.HOST || 'localhost',
+
   apiSecretKey: process.env.API_SECRET_KEY,
+
+  redisUrl: process.env.REDIS_URL,
+
+  cacheDuration: process.env.CACHE_DURATION || 600000,
+  cacheGenerateTimeout: process.env.CACHE_GENERATE_TIMEOUT || 1000,
 };
 
 module.exports = config;

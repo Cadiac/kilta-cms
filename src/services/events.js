@@ -77,40 +77,6 @@ const participateEvent = (eventId, memberId) => {
   return cms.createActiveItem(dataTypes.eventParticipants.table, data);
 };
 
-const initCache = (server, cache = 'redisCache') => {
-  const opts = {
-    cache,
-    expiresIn: 30 * 1000,
-    generateTimeout: 1000
-  };
-
-  const generateEventsKey = (currentPage = 0, limit = perPage) =>
-    `${currentPage},${limit}`;
-
-  server.method('fetchEvent', fetchEvent, {
-    cache: opts,
-    callback: false,
-  });
-
-  server.method('fetchEvents', fetchEvents, {
-    cache: opts,
-    callback: false,
-    generateKey: generateEventsKey,
-  });
-
-  server.method('fetchUpcomingEvents', fetchUpcomingEvents, {
-    cache: opts,
-    callback: false,
-    generateKey: generateEventsKey,
-  });
-
-  server.method('fetchPastEvents', fetchPastEvents, {
-    cache: opts,
-    callback: false,
-    generateKey: generateEventsKey,
-  });
-};
-
 module.exports = {
   fetchEvent,
   fetchEvents,
@@ -118,5 +84,4 @@ module.exports = {
   fetchPastEvents,
   fetchEventParticipants,
   participateEvent,
-  initCache,
 };
