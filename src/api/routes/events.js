@@ -4,6 +4,8 @@ const R = require('ramda');
 
 const eventService = require('../../services/events');
 
+const { cachedReply } = require('../utils');
+
 module.exports.getEvent = {
   description: 'Get data for single event',
   validate: {
@@ -19,8 +21,7 @@ module.exports.getEvent = {
       if (R.isEmpty(event)) {
         return reply(Boom.notFound());
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(event).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, event, cached);
     })
 };
 
@@ -38,8 +39,7 @@ module.exports.getEvents = {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
         }
-        const lastModified = cached ? new Date(cached.stored) : new Date();
-        return reply(events).header('Last-Modified', lastModified.toUTCString());
+        return cachedReply(reply, events, cached);
       })
 };
 
@@ -57,8 +57,7 @@ module.exports.getUpcomingEvents = {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
         }
-        const lastModified = cached ? new Date(cached.stored) : new Date();
-        return reply(events).header('Last-Modified', lastModified.toUTCString());
+        return cachedReply(reply, events, cached);
       })
 };
 
@@ -76,8 +75,7 @@ module.exports.getPastEvents = {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
         }
-        const lastModified = cached ? new Date(cached.stored) : new Date();
-        return reply(events).header('Last-Modified', lastModified.toUTCString());
+        return cachedReply(reply, events, cached);
       })
 };
 

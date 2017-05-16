@@ -1,6 +1,8 @@
 const Boom = require('boom');
 const R = require('ramda');
 
+const { cachedReply } = require('../utils');
+
 module.exports.getFooter = {
   description: 'Get footer data',
   handler: (request, reply) =>
@@ -11,7 +13,6 @@ module.exports.getFooter = {
       if (R.isEmpty(footer)) {
         return reply(Boom.notFound('Footer is missing!'));
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(footer).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, footer, cached);
     })
 };

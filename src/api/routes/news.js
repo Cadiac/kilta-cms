@@ -2,6 +2,8 @@ const Joi = require('joi');
 const Boom = require('boom');
 const R = require('ramda');
 
+const { cachedReply } = require('../utils');
+
 module.exports.getNewsArticles = {
   description: 'Get list of news',
   validate: {
@@ -14,8 +16,7 @@ module.exports.getNewsArticles = {
       if (err) {
         return reply(Boom.badImplementation('Fetching news failed', err));
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(news).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, news, cached);
     })
 };
 
@@ -34,8 +35,7 @@ module.exports.getNewsArticle = {
       if (R.isEmpty(newsArticle)) {
         return reply(Boom.notFound(`News article ${request.params.id} was not found!`));
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(newsArticle).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, newsArticle, cached);
     })
 };
 
@@ -46,7 +46,6 @@ module.exports.getNewsCategories = {
       if (err) {
         return reply(Boom.badImplementation('Fetching news failed', err));
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(news).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, news, cached);
     })
 };

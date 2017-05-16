@@ -1,5 +1,7 @@
 const Boom = require('boom');
 
+const { cachedReply } = require('../utils');
+
 module.exports.getSponsors = {
   description: 'Get list of sponsors',
   handler: (request, reply) =>
@@ -7,7 +9,6 @@ module.exports.getSponsors = {
       if (err) {
         return reply(Boom.badImplementation('Fetching sponsors failed', err));
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(sponsors).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, sponsors, cached);
     })
 };

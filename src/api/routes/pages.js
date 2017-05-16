@@ -2,6 +2,8 @@ const Joi = require('joi');
 const Boom = require('boom');
 const R = require('ramda');
 
+const { cachedReply } = require('../utils');
+
 module.exports.getGuildInformation = {
   description: 'Get general guild information, such as logo and guild name',
   handler: (request, reply) =>
@@ -12,8 +14,7 @@ module.exports.getGuildInformation = {
       if (R.isEmpty(info)) {
         return reply(Boom.notFound('Guild info ("Landing Page") is missing!'));
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(info).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, info, cached);
     })
 };
 
@@ -33,8 +34,7 @@ module.exports.getGuildBoardByYear = {
         if (R.isEmpty(board)) {
           return reply(Boom.notFound('Board not found!'));
         }
-        const lastModified = cached ? new Date(cached.stored) : new Date();
-        return reply(board).header('Last-Modified', lastModified.toUTCString());
+        return cachedReply(reply, board, cached);
       })
 };
 
@@ -45,8 +45,7 @@ module.exports.getGuildBoards = {
       if (err) {
         return reply(Boom.badImplementation('Fetching guild boards failed', err));
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(boards).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, boards, cached);
     })
 };
 
@@ -57,8 +56,7 @@ module.exports.getSubPages = {
       if (err) {
         return reply(Boom.badImplementation('Fetching subpages failed', err));
       }
-      const lastModified = cached ? new Date(cached.stored) : new Date();
-      return reply(subpages).header('Last-Modified', lastModified.toUTCString());
+      return cachedReply(reply, subpages, cached);
     })
 };
 
@@ -78,8 +76,7 @@ module.exports.getSubPageBySlug = {
         if (R.isEmpty(subpage)) {
           return reply(Boom.notFound(`Subpage ${request.params.slug} was not found!`));
         }
-        const lastModified = cached ? new Date(cached.stored) : new Date();
-        return reply(subpage).header('Last-Modified', lastModified.toUTCString());
+        return cachedReply(reply, subpage, cached);
       }
     )
 };
