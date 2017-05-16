@@ -2,21 +2,19 @@ const Joi = require('joi');
 const Boom = require('boom');
 const R = require('ramda');
 
-const commonService = require('../../services/common');
-const guildService = require('../../services/guild');
-
 module.exports.getGuildInformation = {
   description: 'Get general guild information, such as logo and guild name',
-  handler(request, reply) {
-    return guildService.fetchGuildInfo(request.params.slug)
-      .then((guild) => {
-        if (R.isEmpty(guild)) {
-          return reply(Boom.notFound('Guild info ("Landing Page") is missing!'));
-        }
-        return reply(guild);
-      })
-      .catch(err => reply(Boom.badImplementation(err)));
-  },
+  handler: (request, reply) =>
+    request.server.methods.fetchGuildInfo((err, info, cached) => {
+      if (err) {
+        return reply(Boom.badImplementation('Fetching guild info failed', err));
+      }
+      if (R.isEmpty(info)) {
+        return reply(Boom.notFound('Guild info ("Landing Page") is missing!'));
+      }
+      const lastModified = cached ? new Date(cached.stored) : new Date();
+      return reply(info).header('Last-Modified', lastModified.toUTCString());
+    })
 };
 
 module.exports.getGuildBoardByYear = {
@@ -26,34 +24,42 @@ module.exports.getGuildBoardByYear = {
       year: Joi.number().integer().min(0).required(),
     },
   },
-  handler(request, reply) {
-    return guildService.fetchGuildBoardByYear(request.params.year)
-      .then((board) => {
-        if (R.isEmpty(board)) {
-          return reply(Boom.notFound());
+  handler: (request, reply) =>
+    request.server.methods.fetchGuildBoardByYear(request.params.year,
+      (err, board, cached) => {
+        if (err) {
+          return reply(Boom.badImplementation('Fetching board failed', err));
         }
-        return reply(board);
+        if (R.isEmpty(board)) {
+          return reply(Boom.notFound('Board not found!'));
+        }
+        const lastModified = cached ? new Date(cached.stored) : new Date();
+        return reply(board).header('Last-Modified', lastModified.toUTCString());
       })
-      .catch(err => reply(Boom.badImplementation(err)));
-  },
 };
 
 module.exports.getGuildBoards = {
   description: 'Get available guild board pages',
-  handler(request, reply) {
-    return guildService.fetchGuildBoards()
-      .then(reply)
-      .catch(err => reply(Boom.badImplementation(err)));
-  },
+  handler: (request, reply) =>
+    request.server.methods.fetchGuildBoards((err, boards, cached) => {
+      if (err) {
+        return reply(Boom.badImplementation('Fetching guild boards failed', err));
+      }
+      const lastModified = cached ? new Date(cached.stored) : new Date();
+      return reply(boards).header('Last-Modified', lastModified.toUTCString());
+    })
 };
 
 module.exports.getSubPages = {
   description: 'Get list of subpages',
-  handler(request, reply) {
-    return commonService.fetchSubPages()
-      .then(reply)
-      .catch(err => reply(Boom.badImplementation(err)));
-  },
+  handler: (request, reply) =>
+    request.server.methods.fetchSubPages((err, subpages, cached) => {
+      if (err) {
+        return reply(Boom.badImplementation('Fetching subpages failed', err));
+      }
+      const lastModified = cached ? new Date(cached.stored) : new Date();
+      return reply(subpages).header('Last-Modified', lastModified.toUTCString());
+    })
 };
 
 module.exports.getSubPageBySlug = {
@@ -63,16 +69,17 @@ module.exports.getSubPageBySlug = {
       slug: Joi.string().regex(/^[a-z0-9-]+$/),
     },
   },
-  handler(request, reply) {
-    return commonService.fetchSubPageBySlug(request.params.slug)
-      .then((page) => {
-        if (R.isEmpty(page)) {
-          return reply(Boom.notFound());
+  handler: (request, reply) =>
+    request.server.methods.fetchSubPageBySlug(request.params.slug,
+      (err, subpage, cached) => {
+        if (err) {
+          return reply(Boom.badImplementation('Fetching subpage failed', err));
         }
-
-        return reply(page);
-      })
-      .then(reply)
-      .catch(err => reply(Boom.badImplementation(err)));
-  },
+        if (R.isEmpty(subpage)) {
+          return reply(Boom.notFound(`Subpage ${request.params.slug} was not found!`));
+        }
+        const lastModified = cached ? new Date(cached.stored) : new Date();
+        return reply(subpage).header('Last-Modified', lastModified.toUTCString());
+      }
+    )
 };

@@ -2,8 +2,6 @@ const Joi = require('joi');
 const Boom = require('boom');
 const R = require('ramda');
 
-const newsService = require('../../services/news');
-
 module.exports.getNewsArticles = {
   description: 'Get list of news',
   validate: {
@@ -11,11 +9,14 @@ module.exports.getNewsArticles = {
       page: Joi.number().integer().min(0),
     },
   },
-  handler(request, reply) {
-    return newsService.fetchNewsArticles(request.query.page)
-      .then(reply)
-      .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
-  },
+  handler: (request, reply) =>
+    request.server.methods.fetchNewsArticles(request.query.page, (err, news, cached) => {
+      if (err) {
+        return reply(Boom.badImplementation('Fetching news failed', err));
+      }
+      const lastModified = cached ? new Date(cached.stored) : new Date();
+      return reply(news).header('Last-Modified', lastModified.toUTCString());
+    })
 };
 
 module.exports.getNewsArticle = {
@@ -25,28 +26,27 @@ module.exports.getNewsArticle = {
       id: Joi.number().integer().min(0).required(),
     },
   },
-  handler(request, reply) {
-    return newsService.fetchNewsArticle(request.params.id)
-      .then((news) => {
-        if (R.isEmpty(news)) {
-          return reply(Boom.notFound(`News article ${request.params.id} was not found!`));
-        }
-        return reply(news);
-      })
-      .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
-  },
+  handler: (request, reply) =>
+    request.server.methods.fetchNewsArticle(request.params.id, (err, newsArticle, cached) => {
+      if (err) {
+        return reply(Boom.badImplementation('Fetching news failed', err));
+      }
+      if (R.isEmpty(newsArticle)) {
+        return reply(Boom.notFound(`News article ${request.params.id} was not found!`));
+      }
+      const lastModified = cached ? new Date(cached.stored) : new Date();
+      return reply(newsArticle).header('Last-Modified', lastModified.toUTCString());
+    })
 };
 
 module.exports.getNewsCategories = {
   description: 'Get list of news categories',
-  handler(request, reply) {
-    return newsService.fetchNewsCategories()
-      .then((categories) => {
-        if (R.isEmpty(categories)) {
-          return reply(Boom.notFound('No categories found!'));
-        }
-        return reply(categories);
-      })
-      .catch(err => reply(Boom.badImplementation('Fetching news failed', err)));
-  },
+  handler: (request, reply) =>
+    request.server.methods.fetchNewsCategories((err, news, cached) => {
+      if (err) {
+        return reply(Boom.badImplementation('Fetching news failed', err));
+      }
+      const lastModified = cached ? new Date(cached.stored) : new Date();
+      return reply(news).header('Last-Modified', lastModified.toUTCString());
+    })
 };

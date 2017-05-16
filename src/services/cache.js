@@ -1,11 +1,9 @@
 const config = require('../config/config');
 
-const { fetchEvent, fetchEvents, fetchUpcomingEvents, fetchPastEvents }
-  = require('./events');
-
-// const commonService = require('./common');
-// const guildService = require('./guild');
-// const newsService = require('./news');
+const eventService = require('./events');
+const commonService = require('./common');
+const newsService = require('./news');
+const guildService = require('./guild');
 
 const { constants } = require('../directus');
 
@@ -18,6 +16,12 @@ const cache = {
 };
 
 const initEventCache = (server) => {
+  const {
+    fetchEvent,
+    fetchEvents,
+    fetchUpcomingEvents,
+    fetchPastEvents } = eventService;
+
   const generateEventsKey = (currentPage = 0, limit = perPage) =>
     `${currentPage},${limit}`;
 
@@ -45,11 +49,89 @@ const initEventCache = (server) => {
   });
 };
 
+const initCommonCache = (server) => {
+  const {
+    fetchSubPages,
+    fetchSubPageBySlug,
+    fetchFooter,
+    fetchSponsors } = commonService;
+
+  server.method('fetchSubPages', fetchSubPages, {
+    cache,
+    callback: false,
+  });
+
+  server.method('fetchSubPageBySlug', fetchSubPageBySlug, {
+    cache,
+    callback: false,
+  });
+
+  server.method('fetchFooter', fetchFooter, {
+    cache,
+    callback: false,
+  });
+
+  server.method('fetchSponsors', fetchSponsors, {
+    cache,
+    callback: false,
+  });
+};
+
+const initNewsCache = (server) => {
+  const {
+    fetchNewsArticle,
+    fetchNewsArticles,
+    fetchNewsCategories,
+  } = newsService;
+
+  const generateNewsKey = (currentPage = 0) =>
+    `${currentPage}`;
+
+  server.method('fetchNewsArticle', fetchNewsArticle, {
+    cache,
+    callback: false,
+  });
+
+  server.method('fetchNewsArticles', fetchNewsArticles, {
+    cache,
+    callback: false,
+    generateKey: generateNewsKey,
+  });
+
+  server.method('fetchNewsCategories', fetchNewsCategories, {
+    cache,
+    callback: false,
+  });
+};
+
+const initGuildCache = (server) => {
+  const {
+    fetchGuildBoards,
+    fetchGuildBoardByYear,
+    fetchGuildInfo,
+  } = guildService;
+
+  server.method('fetchGuildInfo', fetchGuildInfo, {
+    cache,
+    callback: false,
+  });
+
+  server.method('fetchGuildBoards', fetchGuildBoards, {
+    cache,
+    callback: false,
+  });
+
+  server.method('fetchGuildBoardByYear', fetchGuildBoardByYear, {
+    cache,
+    callback: false,
+  });
+};
+
 const initCaches = (server, next) => {
   initEventCache(server);
-  // commonService.initCache(server);
-  // guildService.initCache(server);
-  // newsService.initCache(server);
+  initCommonCache(server);
+  initNewsCache(server);
+  initGuildCache(server);
 
   next();
 };
