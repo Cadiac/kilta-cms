@@ -12,14 +12,15 @@ module.exports.getEvent = {
     },
   },
   handler: (request, reply) =>
-    request.server.methods.fetchEvent(request.params.id, (err, event) => {
+    request.server.methods.fetchEvent(request.params.id, (err, event, cached) => {
       if (err) {
         return reply(Boom.badImplementation('Fetching events failed', err));
       }
       if (R.isEmpty(event)) {
         return reply(Boom.notFound());
       }
-      return reply(event);
+      const lastModified = cached ? new Date(cached.stored) : new Date();
+      return reply(event).header('Last-Modified', lastModified.toUTCString());
     })
 };
 
@@ -33,11 +34,12 @@ module.exports.getEvents = {
   },
   handler: (request, reply) =>
     request.server.methods.fetchEvents(request.query.page, request.query.limit,
-      (err, events) => {
+      (err, events, cached) => {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
         }
-        return reply(events);
+        const lastModified = cached ? new Date(cached.stored) : new Date();
+        return reply(events).header('Last-Modified', lastModified.toUTCString());
       })
 };
 
@@ -51,11 +53,12 @@ module.exports.getUpcomingEvents = {
   },
   handler: (request, reply) =>
     request.server.methods.fetchUpcomingEvents(request.query.page, request.query.limit,
-      (err, events) => {
+      (err, events, cached) => {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
         }
-        return reply(events);
+        const lastModified = cached ? new Date(cached.stored) : new Date();
+        return reply(events).header('Last-Modified', lastModified.toUTCString());
       })
 };
 
@@ -69,11 +72,12 @@ module.exports.getPastEvents = {
   },
   handler: (request, reply) =>
     request.server.methods.fetchPastEvents(request.query.page, request.query.limit,
-      (err, events) => {
+      (err, events, cached) => {
         if (err) {
           return reply(Boom.badImplementation('Fetching events failed', err));
         }
-        return reply(events);
+        const lastModified = cached ? new Date(cached.stored) : new Date();
+        return reply(events).header('Last-Modified', lastModified.toUTCString());
       })
 };
 
