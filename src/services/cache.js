@@ -15,123 +15,39 @@ const cache = {
   generateTimeout: config.cacheGenerateTimeout,
 };
 
-const initEventCache = (server) => {
-  const {
-    fetchEvent,
-    fetchEvents,
-    fetchUpcomingEvents,
-    fetchPastEvents } = eventService;
-
-  const generateEventsKey = (currentPage = 0, limit = perPage) =>
-    `${currentPage},${limit}`;
-
-  server.method('fetchEvent', fetchEvent, {
-    cache,
-    callback: false,
-  });
-
-  server.method('fetchEvents', fetchEvents, {
-    cache,
-    callback: false,
-    generateKey: generateEventsKey,
-  });
-
-  server.method('fetchUpcomingEvents', fetchUpcomingEvents, {
-    cache,
-    callback: false,
-    generateKey: generateEventsKey,
-  });
-
-  server.method('fetchPastEvents', fetchPastEvents, {
-    cache,
-    callback: false,
-    generateKey: generateEventsKey,
-  });
-};
-
-const initCommonCache = (server) => {
-  const {
-    fetchSubPages,
-    fetchSubPageBySlug,
-    fetchFooter,
-    fetchSponsors } = commonService;
-
-  server.method('fetchSubPages', fetchSubPages, {
-    cache,
-    callback: false,
-  });
-
-  server.method('fetchSubPageBySlug', fetchSubPageBySlug, {
-    cache,
-    callback: false,
-  });
-
-  server.method('fetchFooter', fetchFooter, {
-    cache,
-    callback: false,
-  });
-
-  server.method('fetchSponsors', fetchSponsors, {
-    cache,
-    callback: false,
-  });
-};
-
-const initNewsCache = (server) => {
-  const {
-    fetchNewsArticle,
-    fetchNewsArticles,
-    fetchNewsCategories,
-  } = newsService;
-
-  const generateNewsKey = (currentPage = 0) =>
-    `${currentPage}`;
-
-  server.method('fetchNewsArticle', fetchNewsArticle, {
-    cache,
-    callback: false,
-  });
-
-  server.method('fetchNewsArticles', fetchNewsArticles, {
-    cache,
-    callback: false,
-    generateKey: generateNewsKey,
-  });
-
-  server.method('fetchNewsCategories', fetchNewsCategories, {
-    cache,
-    callback: false,
-  });
-};
-
-const initGuildCache = (server) => {
-  const {
-    fetchGuildBoards,
-    fetchGuildBoardByYear,
-    fetchGuildInfo,
-  } = guildService;
-
-  server.method('fetchGuildInfo', fetchGuildInfo, {
-    cache,
-    callback: false,
-  });
-
-  server.method('fetchGuildBoards', fetchGuildBoards, {
-    cache,
-    callback: false,
-  });
-
-  server.method('fetchGuildBoardByYear', fetchGuildBoardByYear, {
-    cache,
-    callback: false,
-  });
+const opts = {
+  cache,
+  callback: false,
 };
 
 const initCaches = (server, next) => {
-  initEventCache(server);
-  initCommonCache(server);
-  initNewsCache(server);
-  initGuildCache(server);
+  const generatePagedKey = (currentPage = 0, limit = perPage) =>
+    `${currentPage},${limit}`;
+
+  const pagedOpts = Object.assign({}, opts, { generateKey: generatePagedKey });
+
+  const cachedMethods = [
+    // Events
+    ['fetchEvent', eventService.fetchEvent, opts],
+    ['fetchEvents', eventService.fetchEvents, pagedOpts],
+    ['fetchUpcomingEvents', eventService.fetchUpcomingEvents, pagedOpts],
+    ['fetchPastEvents', eventService.fetchPastEvents, pagedOpts],
+    // Common
+    ['fetchSubPages', commonService.fetchSubPages, opts],
+    ['fetchSubPageBySlug', commonService.fetchSubPageBySlug, opts],
+    ['fetchFooter', commonService.fetchFooter, opts],
+    ['fetchSponsors', commonService.fetchSponsors, opts],
+    // News
+    ['fetchNewsArticle', newsService.fetchNewsArticle, opts],
+    ['fetchNewsArticles', newsService.fetchNewsArticles, pagedOpts],
+    ['fetchNewsCategories', newsService.fetchNewsCategories, opts],
+    // Guild
+    ['fetchGuildInfo', guildService.fetchGuildInfo, opts],
+    ['fetchGuildBoards', guildService.fetchGuildBoards, opts],
+    ['fetchGuildBoardByYear', guildService.fetchGuildBoardByYear, opts],
+  ];
+
+  cachedMethods.forEach(method => server.method(...method));
 
   next();
 };
