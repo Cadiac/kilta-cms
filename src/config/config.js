@@ -13,8 +13,8 @@ const config = {
 
   redisUrl: process.env.REDIS_URL,
 
-  cacheDuration: process.env.CACHE_DURATION || 600000,
-  cacheGenerateTimeout: process.env.CACHE_GENERATE_TIMEOUT || 1000,
+  cacheDuration: Number(process.env.CACHE_DURATION) || 600000,
+  cacheGenerateTimeout: Number(process.env.CACHE_GENERATE_TIMEOUT) || 1000,
 };
 
 module.exports = config;
