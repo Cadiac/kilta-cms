@@ -1,0 +1,13 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - "7"
+
+services:
+  - redis
+
+before_script:
+  - redis-server --port 6378
+  - sleep 2

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./src/server.js",
-    "test": "NODE_ENV=test ./node_modules/lab/bin/lab -v",
+    "test": "source .env.test && ./node_modules/lab/bin/lab -v",
     "lint": "eslint . --ext .js",
     "directus:export": "./tools/export-database-schema.sh",
     "directus:init": "./tools/initialize-database.sh"
@@ -47,6 +47,7 @@
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-plugin-import": "^2.2.0",
     "lab": "^13.1.0",
+    "nock": "^9.0.13",
     "nodemon": "^1.11.0"
   }
 }

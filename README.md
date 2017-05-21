@@ -7,7 +7,7 @@
 Kilta is a CMS for student organization websites. Front end code is found in [kilta-cms-ui](https://github.com/cadiac/kilta-cms-ui)
 
 Tech stack briefly:
-* Nodejs >=6.9.x
+* Nodejs >=7.9.x
     * hapi.js
 * Docker
     * Directus CMS
