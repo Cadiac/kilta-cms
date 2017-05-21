@@ -23,7 +23,7 @@
   "author": "Jaakko Husso (jaakko.husso@futurice.com)",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^1.0.2",
+    "bcryptjs": "^2.4.3",
     "blipp": "^2.3.0",
     "bluebird": "^3.5.0",
     "boom": "^4.2.0",
