@@ -1,0 +1,12 @@
+{
+	"meta": {
+		"table": "events",
+		"type": "collection",
+		"total": 0,
+		"Active": 2,
+		"Delete": 0,
+		"Draft": 0,
+		"total_entries": 2
+	},
+	"data": []
+}

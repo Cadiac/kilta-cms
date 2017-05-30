@@ -1,0 +1,144 @@
+{
+	"meta": {
+		"table": "events",
+		"type": "item"
+	},
+	"data": {
+		"id": 123,
+		"active": 1,
+		"title": "foobar",
+		"slug": "foobar",
+		"created_on": "2017-03-05 21:38:41",
+		"max_participants": 30,
+		"event_start_time": "2017-06-05 21:38:41",
+		"event_end_time": "2017-06-16 21:38:41",
+		"registration_start_time": "2017-03-05 21:38:41",
+		"registration_end_date": "2017-03-24 21:38:41",
+		"location": "kilta",
+		"text": "foobar",
+		"authors": {
+			"meta": {
+				"table": "members",
+				"type": "collection",
+				"total": 2,
+				"Delete": 1,
+				"Active": 2,
+				"Draft": 0,
+				"total_entries": 3
+			},
+			"data": [
+				{
+					"id": 4,
+					"active": 0,
+					"username": "cadiac",
+					"first_name": "foo",
+					"last_name": "bar",
+					"email": "foo@bar.com",
+					"role": "board",
+					"phone": "+358401234567",
+					"password": "foobar",
+					"salt": null
+				},
+				{
+					"id": 6,
+					"active": 1,
+					"username": "foobar",
+					"first_name": "Foo",
+					"last_name": "Bar",
+					"email": "foo@bar.com",
+					"role": "none",
+					"phone": "0401234567",
+					"password": "barfoo",
+					"salt": null
+				}
+			],
+			"junction": {
+				"meta": {
+					"table": "event_authors",
+					"type": "collection",
+					"total": 2,
+					"Draft": 5,
+					"Delete": 0,
+					"Active": 0,
+					"total_entries": 5
+				},
+				"data": [
+					{
+						"id": 1,
+						"active": 2,
+						"member_id": 4,
+						"event_id": 123
+					},
+					{
+						"id": 5,
+						"active": 2,
+						"member_id": 6,
+						"event_id": 123
+					}
+				]
+			}
+		},
+		"participants": {
+			"meta": {
+				"table": "members",
+				"type": "collection",
+				"total": 2,
+				"Delete": 1,
+				"Active": 2,
+				"Draft": 0,
+				"total_entries": 3
+			},
+			"data": [
+				{
+					"id": 4,
+					"active": 0,
+					"username": "cadiac",
+					"first_name": "foo",
+					"last_name": "bar",
+					"email": "foo@bar.com",
+					"role": "board",
+					"phone": "+3584012345678",
+					"password": "foobar",
+					"salt": null
+				},
+				{
+					"id": 5,
+					"active": 1,
+					"username": "cadiac",
+					"first_name": "foo",
+					"last_name": "bar",
+					"email": "cadiac@foo.com",
+					"role": "board",
+					"phone": "+358401234568",
+					"password": "barfoo",
+					"salt": null
+				}
+			],
+			"junction": {
+				"meta": {
+					"table": "event_participants",
+					"type": "collection",
+					"total": 2,
+					"Active": 2,
+					"Draft": 1,
+					"Delete": 0,
+					"total_entries": 3
+				},
+				"data": [
+					{
+						"id": 7,
+						"active": 1,
+						"member_id": 4,
+						"event_id": 123
+					},
+					{
+						"id": 9,
+						"active": 1,
+						"member_id": 5,
+						"event_id": 123
+					}
+				]
+			}
+		}
+	}
+}

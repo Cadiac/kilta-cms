@@ -51,13 +51,40 @@ const setupCachedServer = (done) => {
   });
 };
 
-const mockDirectusEvents = () =>
+const mockMissingDirectusEntry = (id, table, mock = 'missing', query = true) =>
   nock(config.directusApiUrl)
-    .get('/1.1/tables/events/rows')
-    .query(true)
-    .reply(200, require('./mocks/events'));
+    .get(`/1.1/tables/${table}/rows/${id}`)
+    .query(query)
+    .reply(200, require(`./mocks/${mock}`));
+
+const mockMissingDirectusEntries = (table, mock = 'missing', query = true) =>
+  nock(config.directusApiUrl)
+    .get(`/1.1/tables/${table}/rows`)
+    .query(query)
+    .reply(200, require(`./mocks/${mock}`));
+
+const mockExistingDirectusEntry = (id, table, mock, query = true) =>
+  nock(config.directusApiUrl)
+    .get(`/1.1/tables/${table}/rows/${id}`)
+    .query(query)
+    .reply(200, require(`./mocks/${mock}`));
+
+const mockExistingDirectusEntries = (table, mock, query = true) =>
+  nock(config.directusApiUrl)
+    .get(`/1.1/tables/${table}/rows`)
+    .query(query)
+    .reply(200, require(`./mocks/${mock}`));
+
+const mockCreateDirectusEntry = (table, mock, data) =>
+  nock(config.directusApiUrl)
+    .post(`/1.1/tables/${table}/rows`, data)
+    .reply(201, require(`./mocks/${mock}`));
 
 module.exports = {
   setupCachedServer,
-  mockDirectusEvents,
+  mockMissingDirectusEntry,
+  mockMissingDirectusEntries,
+  mockExistingDirectusEntry,
+  mockExistingDirectusEntries,
+  mockCreateDirectusEntry
 };
