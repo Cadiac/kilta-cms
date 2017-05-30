@@ -222,7 +222,7 @@ describe('API', () => {
 
       mockExistingDirectusEntry(6, dataTypes.members.table, 'member.json');
       mockExistingDirectusEntry(123, dataTypes.events.table, 'event.json'); // this fails
-      mockCreateDirectusEntry(dataTypes.eventParticipants.table, 'events.json', {
+      mockCreateDirectusEntry(dataTypes.eventParticipants.table, 'event.json', {
         active: 1,
         member_id: 6,
         event_id: 123,
