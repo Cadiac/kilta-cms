@@ -1,6 +1,7 @@
 const Hapi = require('hapi');
 const authPlugin = require('hapi-auth-jwt2');
 const cacheService = require('../src/services/cache');
+const authService = require('../src/services/auth');
 
 const config = require('../src/config/config');
 
@@ -29,8 +30,8 @@ const setupCachedServer = (done) => {
   server.register(authPlugin);
 
   server.auth.strategy('jwt', 'jwt', {
-    key: config.API_SECRET_KEY,
-    validateFunc: token => token === 'testtoken',
+    key: config.apiSecretKey,
+    validateFunc: authService.validateToken,
     verifyOptions: { algorithms: ['HS256'] },
   });
 
@@ -53,24 +54,28 @@ const setupCachedServer = (done) => {
 
 const mockMissingDirectusEntry = (id, table, mock = 'missing', query = true) =>
   nock(config.directusApiUrl)
+    .persist()
     .get(`/1.1/tables/${table}/rows/${id}`)
     .query(query)
     .reply(200, require(`./mocks/${mock}`));
 
 const mockMissingDirectusEntries = (table, mock = 'missing', query = true) =>
   nock(config.directusApiUrl)
+    .persist()
     .get(`/1.1/tables/${table}/rows`)
     .query(query)
     .reply(200, require(`./mocks/${mock}`));
 
 const mockExistingDirectusEntry = (id, table, mock, query = true) =>
   nock(config.directusApiUrl)
+    .persist()
     .get(`/1.1/tables/${table}/rows/${id}`)
     .query(query)
     .reply(200, require(`./mocks/${mock}`));
 
 const mockExistingDirectusEntries = (table, mock, query = true) =>
   nock(config.directusApiUrl)
+    .persist()
     .get(`/1.1/tables/${table}/rows`)
     .query(query)
     .reply(200, require(`./mocks/${mock}`));

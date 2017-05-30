@@ -1,0 +1,18 @@
+{
+	"meta": {
+		"table": "members",
+		"type": "item"
+	},
+	"data": {
+		"id": 4,
+		"active": 0,
+		"username": "testuser",
+		"first_name": "Foo",
+		"last_name": "Bar",
+		"email": "test@test.com",
+		"role": "board",
+		"phone": "+3581234567",
+		"password": "$2y$12$XQlfx6r1PJbkwijIlHO3eenFzDEeS3zzOvb.9zsHHtzV.V3UuLJli",
+		"salt": null
+	}
+}

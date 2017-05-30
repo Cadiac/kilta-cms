@@ -1,0 +1,25 @@
+{
+	"meta": {
+		"table": "members",
+		"type": "collection",
+		"total": 1,
+		"Delete": 1,
+		"Active": 2,
+		"Draft": 0,
+		"total_entries": 3
+	},
+	"data": [
+		{
+			"id": 4,
+			"active": 0,
+			"username": "testuser2",
+			"first_name": "Foo",
+			"last_name": "Bar",
+			"email": "test@test.com",
+			"role": "board",
+			"phone": "+3581234567",
+			"password": "$2y$12$XQlfx6r1PJbkwijIlHO3eenFzDEeS3zzOvb.9zsHHtzV.V3UuLJli",
+			"salt": null
+		}
+  ]
+}
