@@ -54,28 +54,24 @@ const setupCachedServer = (done) => {
 
 const mockMissingDirectusEntry = (id, table, mock = 'missing', query = true) =>
   nock(config.directusApiUrl)
-    .persist()
     .get(`/1.1/tables/${table}/rows/${id}`)
     .query(query)
     .reply(200, require(`./mocks/${mock}`));
 
 const mockMissingDirectusEntries = (table, mock = 'missing', query = true) =>
   nock(config.directusApiUrl)
-    .persist()
     .get(`/1.1/tables/${table}/rows`)
     .query(query)
     .reply(200, require(`./mocks/${mock}`));
 
 const mockExistingDirectusEntry = (id, table, mock, query = true) =>
   nock(config.directusApiUrl)
-    .persist()
     .get(`/1.1/tables/${table}/rows/${id}`)
     .query(query)
     .reply(200, require(`./mocks/${mock}`));
 
 const mockExistingDirectusEntries = (table, mock, query = true) =>
   nock(config.directusApiUrl)
-    .persist()
     .get(`/1.1/tables/${table}/rows`)
     .query(query)
     .reply(200, require(`./mocks/${mock}`));

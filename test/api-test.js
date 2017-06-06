@@ -13,7 +13,7 @@ const {
   mockMissingDirectusEntries,
   mockExistingDirectusEntry,
   mockExistingDirectusEntries,
-  mockCreateDirectusEntry } = require('./test-helpers');
+} = require('./test-helpers');
 
 describe('API', () => {
   let server;
@@ -195,13 +195,21 @@ describe('API', () => {
         },
       };
 
-      mockExistingDirectusEntry(4, dataTypes.members.table, 'member.json');
-      mockExistingDirectusEntry(123, dataTypes.events.table, 'event.json'); // this fails
-      mockCreateDirectusEntry(dataTypes.eventParticipants.table, 'events.json', {
-        active: 1,
-        member_id: 321,
-        event_id: 123,
-      });
+      const event = require('./mocks/event.json');
+      const member = require('./mocks/member.json');
+
+      nock('http://localhost:8001/api')
+        .persist()
+        .get('/1.1/tables/events/rows/123?status=1')
+        .reply(200, event)
+        .get('/1.1/tables/members/rows/4?status=1')
+        .reply(200, member)
+        .post(`/1.1/tables/${dataTypes.eventParticipants.table}/rows`, {
+          active: 1,
+          member_id: 6,
+          event_id: 123,
+        })
+        .reply(200, event);
 
       server.inject(options, (response) => {
         expect(response.statusCode).to.equal(400);
@@ -220,13 +228,21 @@ describe('API', () => {
         },
       };
 
-      mockExistingDirectusEntry(6, dataTypes.members.table, 'member.json');
-      mockExistingDirectusEntry(123, dataTypes.events.table, 'event.json'); // this fails
-      mockCreateDirectusEntry(dataTypes.eventParticipants.table, 'event.json', {
-        active: 1,
-        member_id: 6,
-        event_id: 123,
-      });
+      const event = require('./mocks/event.json');
+      const member = require('./mocks/member.json');
+
+      nock('http://localhost:8001/api')
+        .persist()
+        .get('/1.1/tables/events/rows/123?status=1')
+        .reply(200, event)
+        .get('/1.1/tables/members/rows/6?status=1')
+        .reply(200, member)
+        .post(`/1.1/tables/${dataTypes.eventParticipants.table}/rows`, {
+          active: 1,
+          member_id: 6,
+          event_id: 123,
+        })
+        .reply(200, event);
 
       server.inject(options, (response) => {
         expect(response.statusCode).to.equal(201);
