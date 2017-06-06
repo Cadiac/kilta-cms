@@ -48,6 +48,7 @@
     "eslint-plugin-import": "^2.2.0",
     "lab": "^13.1.0",
     "nock": "^9.0.13",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "redis": "^2.7.1"
   }
 }

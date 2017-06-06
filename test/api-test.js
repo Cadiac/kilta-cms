@@ -1,11 +1,16 @@
 const Lab = require('lab');
 const { expect } = require('code');
 const nock = require('nock');
+const redis = require('redis');
+
+const config = require('../src/config/config');
 
 const lab = exports.lab = Lab.script();
 const { describe, it, before, afterEach } = lab;
 
 const { dataTypes } = require('../src/directus');
+
+const redisClient = redis.createClient(config.redisUrl);
 
 const {
   setupCachedServer,
@@ -32,7 +37,12 @@ describe('API', () => {
 
   afterEach((done) => {
     nock.cleanAll();
-    done();
+    // Clean cache
+    redisClient.flushdb((err, success) => {
+      if (success) {
+        done();
+      }
+    });
   });
 
   describe('POST /api/v1/auth/login', () => {
